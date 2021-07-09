@@ -64,12 +64,9 @@ def convert_roberta_checkpoint_to_pytorch(
         max_position_embeddings=514,
         type_vocab_size=1,
         layer_norm_eps=1e-5,  # PyTorch default used in fairseq
-        layernorm_after_output=False
     )
     if classification_head:
         config.num_labels = roberta.model.classification_heads["mnli"].out_proj.weight.shape[0]
-
-    print('layernorm_after_output', config.layernorm_after_output)
 
     # Older fairseq models have normalized embeddings, see https://github.com/pytorch/fairseq/issues/3600
     normalize_embeddings = (
