@@ -92,7 +92,7 @@ def convert_roberta_checkpoint_to_pytorch(
     if normalize_embeddings:
         model.roberta.embeddings.LayerNorm.weight = roberta_sent_encoder.layernorm_embedding.weight
         model.roberta.embeddings.LayerNorm.bias = roberta_sent_encoder.layernorm_embedding.bias
-    if not normalize_embeddings:
+    else:
         model.roberta.encoder.LayerNorm.weight = roberta_sent_encoder.layer_norm.weight
         model.roberta.encoder.LayerNorm.bias = roberta_sent_encoder.layer_norm.bias
 
