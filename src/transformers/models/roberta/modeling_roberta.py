@@ -279,6 +279,8 @@ class RobertaSelfOutput(nn.Module):
         super().__init__()
         self.normalize_before = config.normalize_embeddings
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+        if self.normalize_before:
+            self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
     def forward(self, hidden_states, input_tensor):
@@ -335,7 +337,7 @@ class RobertaAttention(nn.Module):
         if not self.normalize_before:
             self_outputs=self.self_attn_layer_norm(hidden_states)
         self_outputs = self.self(
-            self_outputs,
+            hidden_states if self.normalize_before else self_outputs,
             attention_mask,
             head_mask,
             encoder_hidden_states,
@@ -472,7 +474,7 @@ class RobertaLayer(nn.Module):
         if not self.normalize_before:
             intermediate_output = self.LayerNorm(attention_output)
 
-        intermediate_output = self.intermediate(intermediate_output)
+        intermediate_output = self.intermediate(attention_output if self.normalize_before else intermediate_output)
         layer_output = self.output(intermediate_output, attention_output)
         return layer_output
 
