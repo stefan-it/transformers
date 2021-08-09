@@ -14,7 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """ RoBERTa configuration """
+from collections import OrderedDict
+from typing import Mapping
 
+from ...onnx import OnnxConfig
 from ...utils import logging
 from ..bert.configuration_bert import BertConfig
 
@@ -36,39 +39,26 @@ class RobertaConfig(BertConfig):
     This is the configuration class to store the configuration of a :class:`~transformers.RobertaModel` or a
     :class:`~transformers.TFRobertaModel`. It is used to instantiate a RoBERTa model according to the specified
     arguments, defining the model architecture.
-
-
     Configuration objects inherit from :class:`~transformers.PretrainedConfig` and can be used to control the model
     outputs. Read the documentation from :class:`~transformers.PretrainedConfig` for more information.
-
     The :class:`~transformers.RobertaConfig` class directly inherits :class:`~transformers.BertConfig`. It reuses the
     same defaults. Please check the parent class for more information.
-
-    Args:
-        normalize_embeddings (:obj:`bool`, `optional`, defaults to :obj:`True`):
-            Whether or not normalize embeddings.
-
     Examples::
-
         >>> from transformers import RobertaConfig, RobertaModel
-
         >>> # Initializing a RoBERTa configuration
         >>> configuration = RobertaConfig()
-
         >>> # Initializing a model from the configuration
         >>> model = RobertaModel(configuration)
-
         >>> # Accessing the model configuration
         >>> configuration = model.config
     """
     model_type = "roberta"
 
-    def __init__(self, pad_token_id=1, bos_token_id=0, eos_token_id=2, normalize_embeddings=True, **kwargs):
+    def __init__(self, pad_token_id=1, bos_token_id=0, eos_token_id=2, **kwargs):
         """Constructs RobertaConfig."""
         super().__init__(pad_token_id=pad_token_id, bos_token_id=bos_token_id, eos_token_id=eos_token_id, **kwargs)
 
-        self.normalize_embeddings = normalize_embeddings
-       
+
 class RobertaOnnxConfig(OnnxConfig):
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
